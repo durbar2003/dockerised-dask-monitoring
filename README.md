@@ -1,2 +1,2 @@
 # dockerised-dask-monitoring
-Dask monitoring using Prometheus in a dockerised container
+Dask and Jupyterhub monitoring using Prometheus in a dockerised container
