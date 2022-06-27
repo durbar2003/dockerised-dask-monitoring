@@ -4,6 +4,8 @@ services:
   scheduler:
     image: ghcr.io/dask/dask:latest
     hostname: scheduler
+    environment:
+      - EXTRA_PIP_PACKAGES=prometheus_client
     ports:
       - "8786:8786"
       - "8787:8787"
@@ -15,6 +17,8 @@ services:
     # For Docker swarm you can specify multiple workers, this is ignored by `docker-compose up`
     deploy:
       replicas: 2
+    environment:
+      - EXTRA_PIP_PACKAGES=prometheus_client
 
   notebook:
     image: ghcr.io/dask/dask-notebook:latest
@@ -22,3 +26,13 @@ services:
       - "8888:8888"
     environment:
       - DASK_SCHEDULER_ADDRESS="tcp://scheduler:8786"
+      - EXTRA_PIP_PACKAGES=prometheus_client
+
+  prometheus:
+    container_name: prometheus-dask
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    command: --config.file=/etc/prometheus/prometheus.yaml
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
